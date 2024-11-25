@@ -8,9 +8,12 @@ def execute_command(command):
         print(f"Command '{command}' failed with exit code {e.returncode}")
         print(f"Error output: {e.stderr.strip()}")
         return None
-    
-output = execute_command("sudo ufw app list")
-print(output)
-app = input("Enter Application name: ")
-output1 = execute_command(f"sudo ufw allow {app}")
-print(output1)
+
+# Function to show all firewall rules
+def show_all_module2_eight():
+    command = "sudo ufw status"
+    output = execute_command(command)
+    if output:
+        return output.splitlines()  # Return each line as a list item
+    return None
+

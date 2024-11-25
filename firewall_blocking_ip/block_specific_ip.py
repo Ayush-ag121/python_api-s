@@ -8,10 +8,7 @@ def execute_command(command):
         print(f"Command '{command}' failed with exit code {e.returncode}")
         print(f"Error output: {e.stderr.strip()}")
         return None
-    
+
 def block_module3_second(ip):
     command = f"sudo ufw deny from {ip}"
-    execute_command(command)
-
-ip = input("Enter IP Address: ")
-block_module3_second(ip)
+    return execute_command(command)

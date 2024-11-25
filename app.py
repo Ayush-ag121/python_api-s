@@ -1,10 +1,14 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS  # Import CORS
+# module2 Imports
 from firewall_allow_all_necessary_ports.allow_all_deny_port_1 import manage_ports,list_deny_ports,allow_all_ports,deny_port  # Import allow_port
-from firewall_allow_all_necessary_ports.allow_all_ports import list_deny_ports_third,allow_all_third  # Import allow_port
-
+from firewall_allow_all_necessary_ports.app_list import list_apps_module2_fourth,allow_app_module2_fourth  # Import allow_port
+from firewall_allow_all_necessary_ports.show_all_ports import show_all_module2_eight
 from firewall_allow_all_necessary_ports.allow_1 import allow_port  # Import allow_port
-# from module2.file import block_ip  # Import block_ip from module2
+# modeule3 Imports
+from firewall_blocking_ip.block_range_of_ip_address import block_module3_first
+from firewall_blocking_ip.block_specific_ip import block_module3_second
+
 import subprocess
 
 app = Flask(__name__)
@@ -85,6 +89,62 @@ def get_denied_ports():
 #         return jsonify({"message": result}), 400
 #     return jsonify({"message": result})
 
+
+#module 2 fourth
+@app.route('/api/apps', methods=['GET'])
+def get_apps_module2_fourth():
+    apps = list_apps_module2_fourth()
+    if apps is None:
+        return jsonify({"error": "Failed to fetch application list"}), 500
+    return jsonify({"apps": apps})
+
+# Endpoint to allow an application
+@app.route('/api/allow-app', methods=['POST'])
+def allow_application_module2_fourth():
+    data = request.get_json()
+    app_name = data.get("app")
+    if not app_name:
+        return jsonify({"error": "Application name is required"}), 400
+
+    result = allow_app_module2_fourth(app_name)
+    if result is None:
+        return jsonify({"error": f"Failed to allow application '{app_name}'"}), 500
+    return jsonify({"message": f"Application '{app_name}' allowed successfully."})
+
+#module2 eight
+@app.route('/api/show-all', methods=['GET'])
+def get_firewall_status():
+    rules = show_all_module2_eight()
+    if rules is None:
+        return jsonify({"error": "Failed to fetch firewall status"}), 500
+    return jsonify({"rules": rules})
+
+@app.route('/api/block-ip', methods=['POST'])
+def block_ip():
+    data = request.json
+    ip = data.get('ip')
+    if not ip:
+        return jsonify({"error": "IP address is required"}), 400
+
+    result = block_module3_first(ip)
+    if result:
+        return jsonify({"message": f"IP {ip} blocked successfully", "result": result}), 200
+    else:
+        return jsonify({"error": f"Failed to block IP {ip}"}), 500
+
+
+@app.route('/api/block-ip-single', methods=['POST'])
+def block_ip_single():
+    data = request.json
+    ip = data.get('ip')
+    if not ip:
+        return jsonify({"error": "IP address is required"}), 400
+
+    result = block_module3_second(ip)
+    if result:
+        return jsonify({"message": f"IP {ip} blocked successfully", "result": result}), 200
+    else:
+        return jsonify({"error": f"Failed to block IP {ip}"}), 500
 
 
 if __name__ == "__main__":

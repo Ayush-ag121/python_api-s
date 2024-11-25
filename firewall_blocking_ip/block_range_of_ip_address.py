@@ -9,10 +9,6 @@ def execute_command(command):
         print(f"Error output: {e.stderr.strip()}")
         return None
 
-
-def show_all_module2_eight():
-    command = "sudo ufw status"
-    output = execute_command(command)
-    print(output)
-
-show_all_module2_eight()
+def block_module3_first(ip):
+    command = f"sudo ufw deny from {ip}"
+    return execute_command(command)
