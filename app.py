@@ -102,6 +102,7 @@ def get_apps_module2_fourth():
 @app.route('/api/allow-app', methods=['POST'])
 def allow_application_module2_fourth():
     data = request.get_json()
+    print(data)
     app_name = data.get("app")
     if not app_name:
         return jsonify({"error": "Application name is required"}), 400
