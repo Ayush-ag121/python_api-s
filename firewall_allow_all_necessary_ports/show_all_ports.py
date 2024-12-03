@@ -11,7 +11,7 @@ def execute_command(command):
 
 # Function to show all firewall rules
 def show_all_module2_eight():
-    command = "sudo ufw status"
+    command = "sudo ufw status numbered"
     output = execute_command(command)
     if output:
         return output.splitlines()  # Return each line as a list item
